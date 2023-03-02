@@ -50,7 +50,7 @@ def caminho_heuristica(matriz):
     caminho=[]
    
     quantidade_cidades=len(matriz)
-    lista_cidades=list(range(quantidade_cidades)
+    lista_cidades=list(range(quantidade_cidades))
 
     #sorteia uma cidade para comecar
     nome_cidade=random.randint(0,quantidade_cidades)
