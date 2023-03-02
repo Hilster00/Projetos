@@ -50,15 +50,17 @@ def caminho_heuristica(matriz):
     caminho=[]
    
     quantidade_cidades=len(matriz)
-    lista_cidades=[i for i in range(quantidade_cidades)]
+    lista_cidades=list(range(quantidade_cidades)
 
     #sorteia uma cidade para comecar
-    caminho.append(random.randint(0,quantidade_cidades))
-    nome_cidade=caminho[0]  
+    nome_cidade=random.randint(0,quantidade_cidades)
 
     #laco para  execultar enquanto nao tiver passado por todas cidades
-    while len(caminho)!=quantidade_cidades:
-
+    for vez in range(quantidade_cidades):
+        
+        #adiciona a cidade atual a lista de cidades percorridas
+        caminho.append(nome_cidade)
+        
         #remove da lista de cidades a cidade atual
         lista_cidades.remove(nome_cidade)
 
@@ -77,9 +79,6 @@ def caminho_heuristica(matriz):
                 #distancia menor atualiza as variaveis para a proxima compacao
                 menor_distancia=matriz[i][j]
                 nome_cidade=j
-
-        #adiciona a cidade que tem a menor distancia com a cidade atual
-        caminho.append(nome_cidade)
         
     return caminho
 
