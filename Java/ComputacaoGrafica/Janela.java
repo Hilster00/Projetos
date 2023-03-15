@@ -1,8 +1,3 @@
-
-CarlosHenrique05
-/
-CaomputacaoGrafica
-Public
 package com.mycompany.trabalhocg;
 
 import java.awt.Color;
