@@ -3,18 +3,6 @@ CarlosHenrique05
 /
 CaomputacaoGrafica
 Public
-Code
-Issues
-Pull requests
-Actions
-Projects
-Security
-Insights
-CaomputacaoGrafica/Janela.java
-@CarlosHenrique05
-CarlosHenrique05 Create Janela.java
- 1 contributor
-180 lines (147 sloc)  5.18 KB
 package com.mycompany.trabalhocg;
 
 import java.awt.Color;
