@@ -1,7 +1,8 @@
-package com.mycompany.trabalhocg;
+package TrabalhoCG;
 
-public class Main {
+public class main {
     public static void main(String[] args) {
-        new Janela();
+        new Janela(600,600);
+        
     }
 }
