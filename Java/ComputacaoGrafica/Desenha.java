@@ -5,7 +5,18 @@ import java.awt.Graphics;
 import javax.swing.JPanel;
 
 public class Desenha extends JPanel{
-	int pixels[][] = new int[600][600];
+	int pixels[][] ;
+	int altura,largura;
+	public  Desenha(int altura,int largura) {
+		pixels=new int[altura][largura];
+		this.altura=altura;
+		this.largura=largura;
+	}
+	public  Desenha() {
+		pixels=new int[600][600];
+		this.altura=600;
+		this.largura=600;
+	}
 	private Lados lados[];
     private Vx vx[];
     int px1=50, px2=250, px3=210, px4=200,
@@ -19,69 +30,24 @@ public class Desenha extends JPanel{
         vx = new Vx[312];
         for(int i=0;i<312;i++) vx[i] = new Vx();
         
-        /*
-        //teste de criacao de retas
-        g.setColor(Color.RED);
-        algAnalitico(g,50,50,150,150); //45º
-        algAnalitico(g,50,50,150,50); // 0º
-        algAnalitico(g,50,50,50,150); //90º
-        algAnalitico(g,50,50,150,100); //67,5º
-        algAnalitico(g,50,50,100,150); //112,5º
-      
-        int v=150;  
-        g.setColor(Color.GREEN);       
-        algDDA(g,50+v,50,150+v,150);
-        algDDA(g,50+v,50,150+v,150); //45º
-        algDDA(g,50+v,50,150+v,50); // 0º
-        algDDA(g,50+v,50,50+v,150); //90º
-        algDDA(g,50+v,50,150+v,100); //67,5º
-        algDDA(g,50+v,50,100+v,150); //112,5º
-        
-        g.setColor(Color.BLUE);
-        algBres(g,50+2*v,50,150+2*v,150); //45º
-        algBres(g,50+2*v,50,150+2*v,50); // 0º
-        algBres(g,50+2*v,50,50+2*v,150); //90º
-        algBres(g,50+2*v,50,150+2*v,100); //67,5º
-        algBres(g,50+2*v,50,100+2*v,150); //112,5º
-        */
-        
-        /*
-        //teste de criacao de circulos
-        g.setColor(Color.RED);
-        algParam(g, 50,50,200);
-        
-        g.setColor(Color.GREEN);
-        algIncSem(g, 50,151,200);
-        
-        g.setColor(Color.BLUE);
-        algBres(g, 50,252,200);
-        */
-        
-        /*
-        //teste de preenchimento
-        g.setColor(Color.red);
-        poligono(g);
-        g.setColor(Color.blue);
-        preVarred(g,150,150,210,210);
-        g.setColor(Color.red);
-        poligono(g);
-        
-        g.setColor(Color.red);
-        poligono(g);
-        g.setColor(Color.blue);
-        preBF(g,170,170);
-        */
-        criaLados();
-        g.setColor(Color.blue);
-        preAGeo(g);
-        
-        g.setColor(Color.red);
-        algBres(g,px1,py1,px2,py2);
-        algBres(g,px2,py2,px3,py3);
-        algBres(g,px3,py3,px4,py4);
-        algBres(g,px4,py4,px1,py1);
     }
-	
+	 public void limpa(Graphics g) {
+		 for(int i=0;i<altura;i++) {
+			 for(int j=0;j<largura;j++) {
+				 pixels[j][i]=0;
+			 }
+		 }
+	}
+	public void limpa() {
+		Graphics g = getGraphics();
+		 for(int i=0;i<altura;i++) {
+			 for(int j=0;j<largura;j++) {
+				 //g.setColor(Color.white);
+				 //putPixel(g, j, i);
+				 pixels[j][i]=0;
+			 }
+		 }
+	}
 	public void poligono(Graphics g) {
        algBres(g,150,150,200,150);
        algBres(g,200,150,210,180);
@@ -98,9 +64,9 @@ public class Desenha extends JPanel{
 	        lados[1] = new Lados(2,50,200,250,-0.2666);
 	        lados[2] = new Lados(3,200,210,210,-1);
 	        lados[3] = new Lados(4,49,200,50,0.9375);
-	    }
+	   }
 	
-    private void algDDA(Graphics g, int xi, int yi, int xf, int yf) {
+    public void algDDA(Graphics g, int xi, int yi, int xf, int yf) {
 
         int steps;
         float x = xi, y = yi, incX, incY;
@@ -140,7 +106,7 @@ public class Desenha extends JPanel{
             putPixel(g,x,y);
         }
     }
-    private void algBres(Graphics g, int xi, int yi, int xf, int yf) {
+    public void algBres(Graphics g, int xi, int yi, int xf, int yf) {
         
        int x = xi, y = yi, d=0, dx = xf-xi, dy = yf-yi, c, m, incX=1, incY=1;
        
@@ -171,7 +137,6 @@ public class Desenha extends JPanel{
     public void algParam(Graphics g, int raio,int xi,int yi) {
         int x, y;
         for (int ang=0; ang<360; ang++) {
-            System.out.println("Loops: "+ang);
             x = (int) (raio * Math.cos(Math.PI*ang/180));
             y = (int) (raio * Math.sin(Math.PI*ang/180));
             putPixel(g,x+xi,y+yi);
@@ -190,7 +155,7 @@ public class Desenha extends JPanel{
         }
     }
     
-    public void algBres(Graphics g, int raio, int xi, int yi) {
+    public void algBresCir(Graphics g, int raio, int xi, int yi) {
         int x = 0, y = raio, u = 1, v = 2 * raio - 1, e = 0;
 
         while (x <= y) {            
@@ -230,17 +195,20 @@ public class Desenha extends JPanel{
     }
     
     public void preBF(Graphics g, int x, int y) {
-        if (pixels[x][y]== 0) {
-            putPixel(g,x,y);
-            preBF(g,x+1,y);
-            preBF(g,x-1,y);
-            preBF(g,x,y+1);
-            preBF(g,x,y-1);
-        }
+    	if((x<altura &&x>=0)&&(y<largura &&y>=0)) {
+    		if (pixels[x][y]== 0) {
+                putPixel(g,x,y);
+                preBF(g,x+1,y);
+                preBF(g,x-1,y);
+                preBF(g,x,y+1);
+                preBF(g,x,y-1);
+            }
+    	}
+        
     }
     
     
-    private void preAGeo(Graphics g) {
+    public void preAGeo(Graphics g) {
         
         int x;
         for(int i=0;i<4;i++) {
@@ -311,7 +279,9 @@ public class Desenha extends JPanel{
     }
   
     public void putPixel(Graphics g, int x, int y) {
-        g.drawLine(x, y, x, y);
-        pixels[x][y]=1;
+    	if((x < largura && y < altura)&&(0 <= x && 0 <= y)) {
+    		g.drawLine(x, y, x, y);
+            pixels[x][y]=1;
+    	}
     }
 }
