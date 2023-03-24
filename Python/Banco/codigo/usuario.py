@@ -8,18 +8,12 @@ from codigo.configuracoes.configuracoes_bancarias_usuario import configuracoes_b
 def usuario(id):
 
     while True:
-    
         opcao=tela_usuario_logado()
-
         if opcao == "1":
-
             opcoes_bancarias(id)
             
-
         elif  opcao== "2":
-
             configuracoes_bancarias_usuario(id)
             
         else:
-
             exit()
