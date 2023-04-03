@@ -43,11 +43,16 @@ public class Janela extends JFrame {
 		mudar_cursor(1); 
 		repaint();
     }
-    
+    public void showPanel3() {
+    	opcoes[0]=1;
+		opcoes[1]=0;
+		mudar_cursor(2); 
+		repaint();
+    }
 	public Janela(int altura,int largura) {
 
 		this.add(desenho);
-		showPanel1();
+		showPanel2();
 		//configurando a janela
 		this.setTitle("Algoritmo de Recorte de Retas de Cohen-Sutherland");
 	    this.setSize(600,600);
@@ -119,10 +124,7 @@ public class Janela extends JFrame {
 				c1.addMouseListener(new MouseAdapter() {
 					@Override
 					public void mouseClicked(MouseEvent e) {
-						opcoes[0]=1;
-						opcoes[1]=0;
-						mudar_cursor(0);
-						panel.repaint();
+						showPanel3();
 					}
 				});	
 				c2.addMouseListener(new MouseAdapter() {
@@ -213,6 +215,8 @@ public class Janela extends JFrame {
 		Poly poly = null;
 	    int x0, y0; 
 	    boolean pronto = true;
+	    Ponto2D[] pts = new Ponto2D[4];
+	    int np1=0;
 	    
         float xmin, xmax, ymin, ymax, rWidth = 10.0F, rHeight = 7.5F, pixelSize;
         int maxX, maxY, centerX, centerY, np=0;
@@ -231,14 +235,14 @@ public class Janela extends JFrame {
         int iY(float y) {        	
         	return Math.round(centerY - y / pixelSize);            
         }
-      
+   
+       
         
         public Recorte() {
             addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent evt) {
             	if(opcoes[0]==opcoes[1] && opcoes[0] == 0) {
 	            		
-	            	
 	                float x = fx((evt.getX())), y = fy(evt.getY());
 	                if (np == 2) np = 0;
 	                if (np == 0) {xmin = x; ymin = y;}
@@ -256,20 +260,27 @@ public class Janela extends JFrame {
 	                    }
 	                }
 	                np++;
-	                repaint();
                 }else {
-                	int x = evt.getX(), y = evt.getY();
-                    if (pronto) {
-                        poly = new Poly();
-                        x0 = x; y0 = y;
-                        pronto = false;
-                    }
-                    if (poly.size() > 0 && Math.abs(x - x0) < 3 && Math.abs(y - y0) < 3) 
-                            pronto = true;
-                    else
-                        poly.addVertex(new Ponto2D(fx(x), fy(y)));
-                    repaint();
+                	if(opcoes[1]==1 && opcoes[0] == 0) {
+                		int x = evt.getX(), y = evt.getY();
+                        if (pronto) {
+                            poly = new Poly();
+                            x0 = x; y0 = y;
+                            pronto = false;
+                        }
+                        if (poly.size() > 0 && Math.abs(x - x0) < 3 && Math.abs(y - y0) < 3) 
+                                pronto = true;
+                        else
+                            poly.addVertex(new Ponto2D(fx(x), fy(y)));
+                	}else {
+                		 float x = fx(evt.getX()), y = fy(evt.getY());
+                         if (np1 == 4) np1 = 0;
+                         pts[np1++] = new Ponto2D(x,y);
+                         
+                	}
+                	
                 }
+            	repaint();
             }
         });
         }
@@ -324,7 +335,8 @@ public class Janela extends JFrame {
     
         @Override
         public void paint (Graphics g) {
-        	if(opcoes[0]==opcoes[1] && opcoes[0] == 0) {
+        	
+        	if(opcoes[0]==0 && opcoes[1] == 0) {
 	            initValues();
 	            if ((np ==0)||(np==1)) drawLine(g,-4,3,4,-3);
 	            clipLine(g,-4,3,4,-3,xmin,ymin,xmax,ymax);
@@ -339,6 +351,7 @@ public class Janela extends JFrame {
 	                
 	            }
 	        	}else {
+	        		if(opcoes[0]==0 && opcoes[1] == 1) {
 	        		initValues();
 	                float xmin = -rWidth / 3, xmax = rWidth / 3,
 	                        ymin = -rHeight /3, ymax = rHeight / 3;
@@ -366,8 +379,38 @@ public class Janela extends JFrame {
 	                    poly.clipPoli(xmin,ymin, xmax, ymax);
 	                    drawPoly(g, poly);
 	                }
+	        		}else {
+	        			initValues();
+	        	        int left = iX(-rWidth / 2), right = iX(rWidth / 2), 
+	        	                bottom = iY(-rHeight / 2), top = iY(rHeight / 2);
+	        	        g.drawRect(left, top, right - left, bottom - top);
+	        	        for (int i=0; i < np1; i++) {
+	        	            g.drawRect(iX(pts[i].x)-2, iY(pts[i].y)-2, 4, 4);
+	        	            if (i > 0) g.drawLine(iX(pts[i-1].x), iY(pts[i-1].y), iX(pts[i].x), iY(pts[i].y));
+	        	        }
+	        	        if (np1 == 4) geraCurva(g,pts[0], pts[1], pts[2], pts[3]);
+	        		}
         	}
+        }
         
+        
+        
+        Ponto2D medio(Ponto2D p1, Ponto2D p2) {
+            return new Ponto2D((p1.x + p2.x)/2,(p1.y + p2.y)/2);
+        }
+        
+        void geraCurva(Graphics g, Ponto2D p0, Ponto2D p1, Ponto2D p2, Ponto2D p3) {
+            int x0 = iX(p0.x), y0 = iY(p0.y), x3 = iX(p3.x), y3 = iY(p3.y);
+            
+            if (Math.abs(x0 - x3) <= 1 && Math.abs(y0 - y3) <=1) {
+                g.drawLine(x0, y0, x3, y3);
+            } else {
+            Ponto2D 
+                a =medio(p0, p1), b=medio(p3, p2), c= medio(p1,p2), 
+                a1=medio(a,c), b1=medio(b,c), c1=medio(a1,b1);
+            geraCurva(g,p0,a,a1,c1);
+            geraCurva(g,c1,b1,b,p3);
+        }
         }
         void limpar() {
         	this.repaint();
@@ -376,6 +419,7 @@ public class Janela extends JFrame {
         	g.drawLine(iX(xP),iY(yP),iX(xQ), iY(yQ));
         }
         
+     
         void initValues() {
         	
         	Dimension d = getSize();
@@ -477,3 +521,8 @@ public class Janela extends JFrame {
             }
 	} 
 }
+
+class Ponto2D {
+        float x, y;
+        Ponto2D(float x, float y) {this.x= x; this.y = y;}
+ }
