@@ -176,8 +176,8 @@ public class Janela extends JFrame {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     System.out.println("Teste");
-            }
-      });
+                }
+            });
 
 
       
@@ -187,85 +187,88 @@ public class Janela extends JFrame {
     }
 	
     class Recorte extends JComponent {
-      Vector<Ponto2D> pts2 = new Vector<Ponto2D>();
-          int np2 = 0;
-          Polygon poly2 = new Polygon();
-          double tx=1, ty=1, ang=0.1;
-          double mi[][] =  new double[3][2];;
-          double mt[][] = new double[2][2];
-          double mr[][] = new double[3][2];
-
-          boolean pronto2 = false;
-
-      Poly poly = null;
-        int x0, y0; 
-        boolean pronto1 = true;
+        
+        //Inicializacao de variaveis
+        double tx=1, ty=1, ang=0.1;
+        int x0, y0,maxX, maxY, centerX, centerY, np=0,np1=0,np2 = 0;
+        float xmin, xmax, ymin, ymax, rWidth = 10.0F, rHeight = 7.5F, pixelSize;
+        double mi[][] =  new double[3][2];;
+        double mt[][] = new double[2][2];
+        double mr[][] = new double[3][2];
+        boolean pronto1 = true,pronto2 = false;
+        
+        Poly poly = null;
+        Polygon poly2 = new Polygon();
         Ponto2D[] pts = new Ponto2D[4];
-        int np1=0;
+        Vector<Ponto2D> pts2 = new Vector<Ponto2D>();
 
-          float xmin, xmax, ymin, ymax, rWidth = 10.0F, rHeight = 7.5F, pixelSize;
-          int maxX, maxY, centerX, centerY, np=0;
+        
+ 
 
-          public void pushMatrix() {
-              for(int i=0; i<3; i++)
-                  for(int j=0; j<2; j++)
-                      mi[i][j] = mr[i][j];
-          }
+        public void pushMatrix() {
+            for(int i=0; i<3; i++){
+                for(int j=0; j<2; j++){
+                    mi[i][j] = mr[i][j];
+                }
+            }     
+        }
 
 
-          public float fx(int x) {
+        public float fx(int x) {
             return (x - centerX) * pixelSize; 
-          }
+        }
 
-          public float fy(int y) {
-             return (centerY - y) * pixelSize;
-          }
+        public float fy(int y) {
+            return (centerY - y) * pixelSize;
+        }
 
-          int iX(float x) {
-              return Math.round(centerX + x / pixelSize);
-          }
-          int iY(float y) {        	
+        int iX(float x) {
+            return Math.round(centerX + x / pixelSize);
+        }
+        
+        int iY(float y) {        	
             return Math.round(centerY - y / pixelSize);            
-          }
+        }
 
 
 
-          public Recorte() {
+        public Recorte() {
             iniciaMatrizes();
-              addMouseListener(new MouseAdapter() {
-              public void mousePressed(MouseEvent evt) {
-                if(opcoes[0]==0) {
-                  if(opcoes[1]==0) {
-                    float x = fx((evt.getX())), y = fy(evt.getY());
-                        if (np == 2) np = 0;
-                        if (np == 0) {xmin = x; ymin = y;}
-                        else {
-                            xmax = x; ymax = y;
-                            if (xmax < xmin) {
-                                float t = xmax;
-                                xmax = xmin;
-                                xmin = t;
+            addMouseListener(new MouseAdapter() {
+                public void mousePressed(MouseEvent evt) {
+                    if(opcoes[0]==0) {
+                        if(opcoes[1]==0) {
+                            float x = fx((evt.getX())), y = fy(evt.getY());
+                            if (np == 2) np = 0;
+                            if (np == 0) {
+                                xmin = x; ymin = y;
+                            }else{
+                                xmax = x; ymax = y;
+                                if (xmax < xmin) {
+                                    float t = xmax;
+                                    xmax = xmin;
+                                    xmin = t;
+                                }
+                                if (ymax < ymin) {
+                                    float t = ymax;
+                                    ymax = ymin;
+                                    ymin = t;
+                                }
                             }
-                            if (ymax < ymin) {
-                                float t = ymax;
-                                ymax = ymin;
-                                ymin = t;
+                            np++;
+                        }else {
+                            int x = evt.getX(), y = evt.getY();
+                            if (pronto1) {
+                                poly = new Poly();
+                                x0 = x; y0 = y;
+                                pronto1 = false;
                             }
+                            if (poly.size() > 0 && Math.abs(x - x0) < 3 && Math.abs(y - y0) < 3){
+                                pronto1 = true;
+                            }else{
+                                poly.addVertex(new Ponto2D(fx(x), fy(y)));
+                            }     
                         }
-                        np++;
-                  }else {
-                    int x = evt.getX(), y = evt.getY();
-                          if (pronto1) {
-                              poly = new Poly();
-                              x0 = x; y0 = y;
-                              pronto1 = false;
-                          }
-                          if (poly.size() > 0 && Math.abs(x - x0) < 3 && Math.abs(y - y0) < 3) 
-                                  pronto1 = true;
-                          else
-                              poly.addVertex(new Ponto2D(fx(x), fy(y)));
-                  }
-
                   }else {
                   if(opcoes[0]==1) {
                       if(opcoes[1]==0) {
@@ -298,9 +301,9 @@ public class Janela extends JFrame {
                   }
 
                   }
-                repaint();
-              }
-          });
+                    repaint();
+                }
+            });
            addKeyListener(new KeyAdapter() {
                   public void keyTyped(KeyEvent evt) {
                      evt.getKeyChar();
