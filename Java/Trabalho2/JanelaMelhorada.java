@@ -58,9 +58,7 @@ public class Janela extends JFrame {
 	    this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 	    this.setVisible(true);
         this.setResizable(false);
-        setTitle("Trabalho CG");
-        
-
+        setTitle("Trabalho 2 Hilster CG");
 	
 	    JPanel panel = new JPanel();
 
@@ -170,10 +168,14 @@ public class Janela extends JFrame {
                     System.out.println("Teste");
                 }
             });
+
+
+        
+        getContentPane().setLayout(null);
+        this.setVisible(true);
+
     }
-	getContentPane().setLayout(null);
-    this.setVisible(true);
-    
+	
     void mudar_cursor(int i) {
       if(i == 1) {
         this.setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
