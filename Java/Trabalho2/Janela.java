@@ -8,6 +8,7 @@ import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Polygon;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -25,6 +26,20 @@ import javax.swing.JDesktopPane;
 import java.awt.Canvas;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.Vector;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
+import java.awt.Canvas;
+import java.awt.Polygon;
 public class Janela extends JFrame {
 	int opcoes[]= new int[2];
 
@@ -53,6 +68,24 @@ public class Janela extends JFrame {
     public void showPanel11() {
     	opcoes[0]=1;
 		opcoes[1]=1;
+		mudar_cursor(2); 
+		repaint();
+    }
+    public void showPanel20() {
+    	opcoes[0]=2;
+		opcoes[1]=0;
+		mudar_cursor(2); 
+		repaint();
+    }
+    public void showPanel21() {
+    	opcoes[0]=2;
+		opcoes[1]=1;
+		mudar_cursor(2); 
+		repaint();
+    }
+    public void showPanel22() {
+    	opcoes[0]=2;
+		opcoes[1]=2;
 		mudar_cursor(2); 
 		repaint();
     }
@@ -157,28 +190,19 @@ public class Janela extends JFrame {
 			t1.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					opcoes[0]=2;
-					opcoes[1]=0;
-					mudar_cursor(0);
-					panel.repaint();
+					showPanel20();
 				}
 			});	
 			t2.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					opcoes[0]=2;
-					opcoes[1]=1;
-					mudar_cursor(0);
-					panel.repaint();
+					showPanel21();
 				}
 			});
 			t3.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					opcoes[0]=2;
-					opcoes[1]=2;
-					mudar_cursor(0);
-					panel.repaint();
+					showPanel22();
 				}
 			});
 		
@@ -196,11 +220,6 @@ public class Janela extends JFrame {
 		setTitle("Trabalho CG");
 		getContentPane().setLayout(null);
 		this.setVisible(true);
-
-		
-
-		
-
 	      
 	}
 	
@@ -216,9 +235,14 @@ public class Janela extends JFrame {
 	class Recorte extends JComponent {
 		Vector<Ponto2D> pts2 = new Vector<Ponto2D>();
         int np2 = 0;
-   
+        Polygon poly2 = new Polygon();
+        double tx=1, ty=1, ang=0.1;
+        double mi[][] =  new double[3][2];;
+        double mt[][] = new double[2][2];
+        double mr[][] = new double[3][2];
+        
         boolean pronto2 = false;
-		
+
 		Poly poly = null;
 	    int x0, y0; 
 	    boolean pronto1 = true;
@@ -228,6 +252,13 @@ public class Janela extends JFrame {
         float xmin, xmax, ymin, ymax, rWidth = 10.0F, rHeight = 7.5F, pixelSize;
         int maxX, maxY, centerX, centerY, np=0;
 
+        public void pushMatrix() {
+            for(int i=0; i<3; i++)
+                for(int j=0; j<2; j++)
+                    mi[i][j] = mr[i][j];
+        }
+        
+        
         public float fx(int x) {
         	return (x - centerX) * pixelSize; 
         }
@@ -246,6 +277,7 @@ public class Janela extends JFrame {
        
         
         public Recorte() {
+        	iniciaMatrizes();
             addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent evt) {
             	if(opcoes[0]==0) {
@@ -295,10 +327,19 @@ public class Janela extends JFrame {
                             }
                             pts2.addElement(new Ponto2D(x,y));
                             np2++;
-                            repaint();
                 		}
                 }else {
-                		 
+                	if(opcoes[1]==0) {
+                		transformaTranslada(); tx=tx+1; ty=ty+1;
+                	}else {
+                	if(opcoes[1]==1) {
+                		
+                		transformaEscala();
+                	}else {
+                		
+                		transformaRotacao(); ang=ang+0.1;
+                	}
+                	}
                         
                 }
                 	
@@ -314,7 +355,67 @@ public class Janela extends JFrame {
                 }
           });
         }
-    
+        public void transformaEscala() {
+            
+            mt[0][0] = (double) 1.5; mt[0][1] = (double) 0;
+            mt[1][0] = (double) 0; mt[1][1] = (double) 1.5;
+            
+            
+            
+            mr[0][0] =(mi[0][0] * mt[0][0]) + (mi[0][1] * mt[0][1]);
+            mr[0][1] =(mi[0][0] * mt[0][1]) + (mi[0][1] * mt[1][1]);
+            
+            mr[1][0] =(mi[1][0] * mt[0][0]) + (mi[1][1] * mt[0][1]);
+            mr[1][1] =(mi[1][0] * mt[0][1]) + (mi[1][1] * mt[1][1]);
+            
+            mr[2][0] =(mi[2][0] * mt[0][0]) + (mi[2][1] * mt[0][1]);
+            mr[2][1] =(mi[2][0] * mt[0][1]) + (mi[2][1] * mt[1][1]);
+            
+        	pushMatrix();
+            
+        }
+        public void transformaRotacao() {
+           
+            double cos = Math.cos(ang);
+            double sen = Math.sin(ang);
+            
+            mr[0][0] =(mi[0][0] * cos) - (mi[0][1] * sen);
+            mr[0][1] =(mi[0][0] * sen) + (mi[0][1] * cos);
+            
+            mr[1][0] =(mi[1][0] * cos) - (mi[1][1] * sen);
+            mr[1][1] =(mi[1][0] * sen) + (mi[1][1] * cos);
+            
+            mr[2][0] =(mi[2][0] * cos) - (mi[2][1] * sen);
+            mr[2][1] =(mi[2][0] * sen) + (mi[2][1] * cos);
+            
+           pushMatrix();
+            
+        }
+        public void transformaTranslada() {
+            
+            mr[0][0] =(mi[0][0] + tx);
+            mr[0][1] =(mi[0][1] + ty);
+            
+            mr[1][0] =(mi[1][0] + tx);
+            mr[1][1] =(mi[1][1] + ty);
+            
+            mr[2][0] =(mi[2][0] + tx);
+            mr[2][1] =(mi[2][1] + ty);
+            
+            pushMatrix();
+            
+        }
+        
+        private void iniciaMatrizes() {
+            poly2 = new Polygon();
+           
+            mi[0][0] = 150; mi[0][1] = 100;
+            mi[1][0] = 20; mi[1][1] = 200;
+            mi[2][0] = 120; mi[2][1] = 200;
+            
+                    
+
+        }
         int clipCode(float x, float y) {
          return (x < xmin ? 8 : 0) | (x > xmax ? 4 : 0) | (y < ymin ? 2 : 0) | (y > ymax ? 1 : 0);    
         }
@@ -444,9 +545,17 @@ public class Janela extends JFrame {
 	        	        if (np2 >= 4) { g.setColor(Color.red);geraCurva(g,p);}
 	        		}
 	        		
+	        }else {
+	        	
+	        	for(int i=0;i<mi.length; i++) {
+		            poly2.addPoint((int)mi[i][0], (int)mi[i][1]);
+		        }
+		        g.fillPolygon(poly2);
+	        	
 	        }
         	}
         }
+        
         
         
         Ponto2D medio(Ponto2D p1, Ponto2D p2) {
@@ -604,10 +713,7 @@ public class Janela extends JFrame {
             
             
             
-            class Ponto2D {
-                float x, y;
-                Ponto2D(float x, float y) {this.x= x; this.y = y;}
-            }
+           
 	} 
 }
 
