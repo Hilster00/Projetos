@@ -42,93 +42,98 @@ public class Janela extends JFrame {
     public void MudarPanel(int i, int j) {
     	opcoes[0]=i;
       opcoes[1]=j;
-      mudar_cursor(1); 
+      mudar_cursor(2); 
       repaint();
     }
     
-	  public Janela(int altura,int largura) {
+	public Janela(int altura,int largura) {
 
-      this.add(desenho);
-      showPanel00();
-      //configurando a janela
-      this.setTitle("Algoritmo de Recorte de Retas de Cohen-Sutherland");
-      this.setSize(altura,largura);
-      this.setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
+        this.add(desenho);
+        showPanel(0,0);
+        //configurando a janela
+        this.setTitle("Algoritmo de Recorte de Retas de Cohen-Sutherland");
+        this.setSize(altura,largura);
+        this.setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
 	    this.setLocationRelativeTo(null);
 	    this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 	    this.setVisible(true);
-      this.setResizable(false);
+        this.setResizable(false);
+        setTitle("Trabalho CG");
+        getContentPane().setLayout(null);
+        this.setVisible(true);
 
 	
-		  JPanel panel = new JPanel();
+	    JPanel panel = new JPanel();
 
 		
-		  panel.setBounds(0, 0, altura, largura);
-		  getContentPane().add(panel);
-		  panel.setLayout(null);
+	    panel.setBounds(0, 0, altura, largura);
+		getContentPane().add(panel);
+		panel.setLayout(null);
 		
 
 		
-      //Menu de barra
-      JMenuBar menuBar = new JMenuBar();
-      setJMenuBar(menuBar);
+        //Menu de barra
+        JMenuBar menuBar = new JMenuBar();
+        setJMenuBar(menuBar);
 				
 		
-      //Recortes
-      JMenu recortes = new JMenu("Rercortes");
-      menuBar.add(recortes);
-          //linhas	
-            JMenu r1 = new JMenu("Linhas Retas");
-            JMenu r2 = new JMenu("Poligonos");
+        //Recortes
+        JMenu recortes = new JMenu("Rercortes");
+        menuBar.add(recortes);
+        
+        
+        //linhas	
+        JMenu r1 = new JMenu("Linhas Retas");
+        JMenu r2 = new JMenu("Poligonos");
 
-            recortes.add(r1);
-            recortes.add(r2);
+        recortes.add(r1);
+        recortes.add(r2);
 
             r1.addMouseListener(new MouseAdapter() {
-              @Override
-              public void mouseClicked(MouseEvent e) {
+                @Override
+                public void mouseClicked(MouseEvent e) {
 
-                 MudarPanel(0, 0, 1);
+                    MudarPanel(0, 0, 1);
 
-              }
+                }
             });	
             r2.addMouseListener(new MouseAdapter() {
-              @Override
-              public void mouseClicked(MouseEvent e) {
-                MudarPanel(0, 1, 1);
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    MudarPanel(0, 1, 1);
 
-              }
+                }
             });
 
 
-      //Curvas
-      JMenu curvas = new JMenu("Curvas");
-      menuBar.add(curvas);
+        //Curvas
+        JMenu curvas = new JMenu("Curvas");
+        menuBar.add(curvas);
 
 
-          JMenu c1 = new JMenu("Bézier");
-          JMenu c2 = new JMenu("B-Spilner");
+        JMenu c1 = new JMenu("Bézier");
+        JMenu c2 = new JMenu("B-Spilner");
 
-          curvas.add(c1);
-          curvas.add(c2);
+        curvas.add(c1);
+        curvas.add(c2);
 
-          c1.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-              MudarPanel(1, 0, 0);
-            }
-          });	
-          c2.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-              MudarPanel(1, 1, 0);
-            }
-          });
+            c1.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    MudarPanel(1, 0, 0);
+                }
+            });	
+            c2.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    MudarPanel(1, 1, 0);
+                }
+            });
 				
 					
-      //Transformações
-      JMenu transformacoes = new JMenu("Transformações");
-      menuBar.add(transformacoes);
+        //Transformações
+        JMenu transformacoes = new JMenu("Transformações");
+        menuBar.add(transformacoes);
 
         JMenu t1 = new JMenu("Translação");
         JMenu t2 = new JMenu("Escala");
@@ -138,40 +143,34 @@ public class Janela extends JFrame {
         transformacoes.add(t2);
         transformacoes.add(t3);
 
-        t1.addMouseListener(new MouseAdapter() {
-          @Override
-          public void mouseClicked(MouseEvent e) {
-            MudarPanel(2, 0, 0);
-          }
-        });	
-        t2.addMouseListener(new MouseAdapter() {
-          @Override
-          public void mouseClicked(MouseEvent e) {
-            MudarPanel(2, 1, 0);
-          }
-        });
-        t3.addMouseListener(new MouseAdapter() {
-          @Override
-          public void mouseClicked(MouseEvent e) {
-            MudarPanel(2, 2, 0);
-          }
+            t1.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    MudarPanel(2, 0, 0);
+                }
+            });	
+            t2.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    MudarPanel(2, 1, 0);
+                }
+            });
+            t3.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    MudarPanel(2, 2, 0);
+                }
         });
 		
-      JMenu limpar = new JMenu("Limpar");
-      menuBar.add(limpar);
+        JMenu limpar = new JMenu("Limpar");
+        menuBar.add(limpar);
 
-      limpar.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-          System.out.println("Teste");
-        }
-      });
-
-
-      setTitle("Trabalho CG");
-      getContentPane().setLayout(null);
-      this.setVisible(true);
-
+            limpar.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    System.out.println("Teste");
+                }
+            });
     }
 	
     void mudar_cursor(int i) {
@@ -661,9 +660,6 @@ public class Janela extends JFrame {
                       vp = poly1.vp; poly1 = new Poly();
                   }
               }
-
-
-
 
     } 
   }
