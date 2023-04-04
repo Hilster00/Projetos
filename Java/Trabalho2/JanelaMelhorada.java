@@ -29,16 +29,23 @@ import java.awt.event.KeyEvent;
 public class Janela extends JFrame {
 	int opcoes[]= new int[2];
 
-	Recorte desenho = new Recorte();
+	Desenho desenho = new Desenho();
 
     
-   
+    //Mudar forma do cursor
+    void mudar_cursor(int i) {
+        this.setCursor(i == 1? Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR) : Cursor.getDefaultCursor());
+    }
+    
+    
+    //Muda a opcao selecionada
     public void MudarPanel(int i, int j,int cursor) {
     	opcoes[0]=i;
-      opcoes[1]=j;
-      mudar_cursor(cursor); 
-      repaint();
+        opcoes[1]=j;
+        mudar_cursor(cursor); 
+        repaint();
     }
+    
     public void MudarPanel(int i, int j) {
     	opcoes[0]=i;
       opcoes[1]=j;
@@ -46,10 +53,11 @@ public class Janela extends JFrame {
       repaint();
     }
     
+    
+    //construtor
 	public Janela(int altura,int largura) {
-
-        this.add(desenho);
-        MudarPanel(0,0);
+        
+        
         //configurando a janela
         this.setTitle("Algoritmo de Recorte de Retas de Cohen-Sutherland");
         this.setSize(altura,largura);
@@ -60,8 +68,11 @@ public class Janela extends JFrame {
         this.setResizable(false);
         setTitle("Trabalho 2 CG Hilster");
 	
+	
+	    //Inicializa a janela
+        this.add(desenho);
+        MudarPanel(0,0);
 	    JPanel panel = new JPanel();
-
 		
 	    panel.setBounds(0, 0, altura, largura);
 		getContentPane().add(panel);
@@ -72,12 +83,10 @@ public class Janela extends JFrame {
         //Menu de barra
         JMenuBar menuBar = new JMenuBar();
         setJMenuBar(menuBar);
-				
 		
         //Recortes
         JMenu recortes = new JMenu("Rercortes");
         menuBar.add(recortes);
-        
         
         //linhas	
         JMenu r1 = new JMenu("Linhas Retas");
@@ -127,7 +136,7 @@ public class Janela extends JFrame {
                 }
             });
 				
-					
+				
         //Transformações
         JMenu transformacoes = new JMenu("Transformações");
         menuBar.add(transformacoes);
@@ -166,8 +175,8 @@ public class Janela extends JFrame {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     System.out.println("Teste");
-            }
-      });
+                }
+            });
 
 
       
@@ -176,11 +185,7 @@ public class Janela extends JFrame {
 
     }
 	
-    void mudar_cursor(int i) {
-        this.setCursor(if(i == 1) ? Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR) : Cursor.getDefaultCursor());
-    }
-    
-    class Recorte extends JComponent {
+    class Desenho extends JComponent {
       Vector<Ponto2D> pts2 = new Vector<Ponto2D>();
           int np2 = 0;
           Polygon poly2 = new Polygon();
@@ -224,7 +229,7 @@ public class Janela extends JFrame {
 
 
 
-          public Recorte() {
+          public Desenho() {
             iniciaMatrizes();
               addMouseListener(new MouseAdapter() {
               public void mousePressed(MouseEvent evt) {
