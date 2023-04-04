@@ -177,14 +177,9 @@ public class Janela extends JFrame {
     }
 	
     void mudar_cursor(int i) {
-    if(i == 1) {
-        this.setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
-      }else {
-        setCursor(Cursor.getDefaultCursor());
-
-      }
-
+        this.setCursor(if(i == 1) ? Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR) : Cursor.getDefaultCursor());
     }
+    
     class Recorte extends JComponent {
       Vector<Ponto2D> pts2 = new Vector<Ponto2D>();
           int np2 = 0;
