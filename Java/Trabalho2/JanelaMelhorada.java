@@ -1,12 +1,19 @@
 package TrabalhoCG;
 
-import javax.swing.JButton;
-import javax.swing.JMenu;
-import java.awt.event.KeyAdapter;
+import java.awt.Color;
 import java.util.Vector;
+import javax.swing.JMenu;
+import javax.swing.JButton;
+import javax.swing.JMenuBar;
+import java.awt.event.KeyAdapter;
+
+
+
+
+
 import javax.swing.JDesktopPane;
 import javax.swing.JComboBox;
-import javax.swing.JMenuBar;
+
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.Graphics;
@@ -14,22 +21,20 @@ import java.awt.Canvas;
 import java.awt.event.MouseEvent;
 import javax.swing.JMenuItem;
 import java.awt.Dimension;
-import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 import javax.swing.JFrame;
 import javax.swing.JComponent;
 import javax.swing.JToolBar;
 import javax.swing.JPanel;
 import java.awt.Cursor;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Polygon;
 import java.awt.event.KeyEvent;
-
+import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 public class Janela extends JFrame {
 	int opcoes[]= new int[2];
 
-	Desenho desenho = new Desenho();
+	Recorte desenho = new Recorte();
 
     
     //Mudar forma do cursor
@@ -185,7 +190,7 @@ public class Janela extends JFrame {
 
     }
 	
-    class Desenho extends JComponent {
+    class Recorte extends JComponent {
       Vector<Ponto2D> pts2 = new Vector<Ponto2D>();
           int np2 = 0;
           Polygon poly2 = new Polygon();
@@ -229,7 +234,7 @@ public class Janela extends JFrame {
 
 
 
-          public Desenho() {
+          public Recorte() {
             iniciaMatrizes();
               addMouseListener(new MouseAdapter() {
               public void mousePressed(MouseEvent evt) {
