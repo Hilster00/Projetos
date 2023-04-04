@@ -49,7 +49,7 @@ public class Janela extends JFrame {
 	public Janela(int altura,int largura) {
 
         this.add(desenho);
-        MudarPanel(0,0);
+        showPanel(0,0);
         //configurando a janela
         this.setTitle("Algoritmo de Recorte de Retas de Cohen-Sutherland");
         this.setSize(altura,largura);
@@ -58,7 +58,7 @@ public class Janela extends JFrame {
 	    this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 	    this.setVisible(true);
         this.setResizable(false);
-        setTitle("Trabalho 2 Hilster CG");
+
 	
 	    JPanel panel = new JPanel();
 
@@ -166,13 +166,13 @@ public class Janela extends JFrame {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     System.out.println("Teste");
-                }
-            });
+            }
+      });
 
 
-        
-        getContentPane().setLayout(null);
-        this.setVisible(true);
+      setTitle("Trabalho CG");
+      getContentPane().setLayout(null);
+      this.setVisible(true);
 
     }
 	
