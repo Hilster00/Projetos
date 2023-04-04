@@ -1,19 +1,12 @@
 package TrabalhoCG;
 
-import java.awt.Color;
-import java.util.Vector;
-import javax.swing.JMenu;
 import javax.swing.JButton;
-import javax.swing.JMenuBar;
+import javax.swing.JMenu;
 import java.awt.event.KeyAdapter;
-
-
-
-
-
+import java.util.Vector;
 import javax.swing.JDesktopPane;
 import javax.swing.JComboBox;
-
+import javax.swing.JMenuBar;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.Graphics;
@@ -21,15 +14,17 @@ import java.awt.Canvas;
 import java.awt.event.MouseEvent;
 import javax.swing.JMenuItem;
 import java.awt.Dimension;
+import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 import javax.swing.JFrame;
 import javax.swing.JComponent;
 import javax.swing.JToolBar;
 import javax.swing.JPanel;
 import java.awt.Cursor;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Polygon;
 import java.awt.event.KeyEvent;
-import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
+
 
 public class Janela extends JFrame {
 	int opcoes[]= new int[2];
@@ -141,7 +136,6 @@ public class Janela extends JFrame {
                 }
             });
 				
-				
         //Transformações
         JMenu transformacoes = new JMenu("Transformações");
         menuBar.add(transformacoes);
@@ -180,8 +174,8 @@ public class Janela extends JFrame {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     System.out.println("Teste");
-                }
-            });
+            }
+      });
 
 
       
