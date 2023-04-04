@@ -57,7 +57,9 @@ public class Janela extends JFrame {
     //construtor
 	public Janela(int altura,int largura) {
         
-        
+        //Inicializa a janela
+        this.add(desenho);
+        MudarPanel(0,0);
         //configurando a janela
         this.setTitle("Algoritmo de Recorte de Retas de Cohen-Sutherland");
         this.setSize(altura,largura);
@@ -68,11 +70,8 @@ public class Janela extends JFrame {
         this.setResizable(false);
         setTitle("Trabalho 2 CG Hilster");
 	
-	
-	    //Inicializa a janela
-        this.add(desenho);
-        MudarPanel(0,0);
 	    JPanel panel = new JPanel();
+
 		
 	    panel.setBounds(0, 0, altura, largura);
 		getContentPane().add(panel);
@@ -83,10 +82,12 @@ public class Janela extends JFrame {
         //Menu de barra
         JMenuBar menuBar = new JMenuBar();
         setJMenuBar(menuBar);
+				
 		
         //Recortes
         JMenu recortes = new JMenu("Rercortes");
         menuBar.add(recortes);
+        
         
         //linhas	
         JMenu r1 = new JMenu("Linhas Retas");
@@ -136,6 +137,7 @@ public class Janela extends JFrame {
                 }
             });
 				
+					
         //Transformações
         JMenu transformacoes = new JMenu("Transformações");
         menuBar.add(transformacoes);
