@@ -175,8 +175,11 @@ public class Janela extends JFrame {
             limpar.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                	desenho.iniciaMatrizes();
+                	/*desenho.iniciaMatrizes();
                 	desenho.repaint();
+                	desenho.pts2.removeAllElements();
+                	desenho.np2 = 0;*/
+                	desenho.limpar();
                 }
             });
 
@@ -204,6 +207,22 @@ public class Janela extends JFrame {
         Vector<Ponto2D> pts2 = new Vector<Ponto2D>();
 
         
+        public void putPixel(Graphics g, int x, int y) {
+        	if((x < 600 && y < 600)&&(0 <= x && 0 <= y)) {
+        		g.drawLine(x, y, x, y);
+        	}
+        }
+        
+        public void limpar() {
+        	Graphics g = getGraphics();
+	   		 for(int i=0;i<600;i++) {
+	   			 for(int j=0;j<600;j++) {
+	   				 g.setColor(Color.white);
+	   				 putPixel(g, j, i);
+	
+	   			 }
+	   		 }
+        }
         public float fx(int x) {
             return (x - centerX) * pixelSize; 
         }
@@ -286,7 +305,8 @@ public class Janela extends JFrame {
                       }
                   }else {
                     if(opcoes[1]==0) {
-                      transformaTranslada(); tx=tx+1; ty=ty+1;
+                    	
+                    	transformaTranslada(); tx=tx+1; ty=ty+1;
                     }else {
                     if(opcoes[1]==1) {
 
@@ -568,9 +588,7 @@ public class Janela extends JFrame {
                   }
               }
           }
-          void limpar() {
-            this.repaint();
-          }
+         
           void drawLine(Graphics g, float xP, float yP, float xQ, float yQ) {
             g.drawLine(iX(xP),iY(yP),iX(xQ), iY(yQ));
           }
