@@ -178,8 +178,9 @@ public class Janela extends JFrame {
                 	/*desenho.iniciaMatrizes();
                 	desenho.repaint();
                 	desenho.pts2.removeAllElements();
-                	desenho.np2 = 0;*/
-                	desenho.limpar();
+                	desenho.np2 = 0;
+                	desenho.limpar();*/
+                	limpar();
                 }
             });
 
@@ -188,6 +189,22 @@ public class Janela extends JFrame {
         getContentPane().setLayout(null);
         this.setVisible(true);
 
+    }
+	public void putPixel(Graphics g, int x, int y) {
+    	if((x < 600 && y < 600)&&(0 <= x && 0 <= y)) {
+    		g.drawLine(x, y, x, y);
+    	}
+    }
+    
+    public void limpar() {
+    	Graphics g = getGraphics();
+   		 for(int i=0;i<600;i++) {
+   			 for(int j=0;j<600;j++) {
+   				 g.setColor(Color.white);
+   				 putPixel(g, j, i);
+
+   			 }
+   		 }
     }
 	
     class Recorte extends JComponent {
@@ -513,9 +530,9 @@ public class Janela extends JFrame {
                       if(!pronto2) {
                           for (int i=0; i < np2; i++) {
                               g.setColor(Color.black);
-                              //g.drawRect(iX(p[i].x) -2, iY(p[i].y) - 2, 4, 4);
+                              g.drawRect(iX(p[i].x) -2, iY(p[i].y) - 2, 4, 4);
                               if (i > 0) {
-                                //g.drawLine(iX(p[i-1].x), iY(p[i-1].y), iX(p[i].x), iY(p[i].y));
+                                g.drawLine(iX(p[i-1].x), iY(p[i-1].y), iX(p[i].x), iY(p[i].y));
 
                               }
                         }
