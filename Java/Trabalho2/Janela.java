@@ -1,4 +1,4 @@
-package TrabalhoCG;
+package Trabalho2;
 
 
 import java.awt.Color;
