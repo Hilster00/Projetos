@@ -29,7 +29,7 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 public class Janela extends JFrame {
 	int opcoes[]= new int[2];
 
-	Recorte desenho = new Recorte();
+	Desenho desenho = new Desenho();
 
     
     //Mudar forma do cursor
@@ -175,12 +175,7 @@ public class Janela extends JFrame {
             limpar.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                	/*desenho.iniciaMatrizes();
-                	desenho.repaint();
-                	desenho.pts2.removeAllElements();
-                	desenho.np2 = 0;
-                	desenho.limpar();*/
-                	limpar();
+                	desenho.limpar();
                 }
             });
 
@@ -190,24 +185,8 @@ public class Janela extends JFrame {
         this.setVisible(true);
 
     }
-	public void putPixel(Graphics g, int x, int y) {
-    	if((x < 600 && y < 600)&&(0 <= x && 0 <= y)) {
-    		g.drawLine(x, y, x, y);
-    	}
-    }
-    
-    public void limpar() {
-    	Graphics g = getGraphics();
-   		 for(int i=0;i<600;i++) {
-   			 for(int j=0;j<600;j++) {
-   				 g.setColor(Color.white);
-   				 putPixel(g, j, i);
-
-   			 }
-   		 }
-    }
 	
-    class Recorte extends JComponent {
+    class Desenho extends JComponent {
         
         //Inicializacao de variaveis
         double tx=1, ty=1, ang=0.1;
@@ -216,30 +195,20 @@ public class Janela extends JFrame {
         double mi[][] =  new double[3][2];;
         double mt[][] = new double[2][2];
         double mr[][] = new double[3][2];
-        boolean pronto1 = true,pronto2 = false;
+        boolean pronto1 = true,pronto2 = false,visivel=true;
         
         Poly poly = null;
         Polygon poly2 = new Polygon();
         Ponto2D[] pts = new Ponto2D[4];
         Vector<Ponto2D> pts2 = new Vector<Ponto2D>();
-
-        
-        public void putPixel(Graphics g, int x, int y) {
-        	if((x < 600 && y < 600)&&(0 <= x && 0 <= y)) {
-        		g.drawLine(x, y, x, y);
-        	}
-        }
         
         public void limpar() {
-        	Graphics g = getGraphics();
-	   		 for(int i=0;i<600;i++) {
-	   			 for(int j=0;j<600;j++) {
-	   				 g.setColor(Color.white);
-	   				 putPixel(g, j, i);
-	
-	   			 }
-	   		 }
+        	iniciaMatrizes();
+        	repaint();
+        	pts2.removeAllElements();
+        	np2 = 0;
         }
+        
         public float fx(int x) {
             return (x - centerX) * pixelSize; 
         }
@@ -267,7 +236,7 @@ public class Janela extends JFrame {
             mi[2][0] = 120; mi[2][1] = 200;
         }
         
-        public Recorte() {
+        public Desenho() {
             iniciaMatrizes();
             addMouseListener(new MouseAdapter() {
                 public void mousePressed(MouseEvent evt) {
@@ -306,20 +275,25 @@ public class Janela extends JFrame {
                         }
                   }else {
                   if(opcoes[0]==1) {
-                      if(opcoes[1]==0) {
-                        float x = fx(evt.getX()), y = fy(evt.getY());
-                              if (np1 == 4) np1 = 0;
-                              pts[np1++] = new Ponto2D(x,y);
-                      }else {
-                        float x= fx(evt.getX()), y = fy(evt.getY());
-                              if(pronto2) {
-                                  pts2.removeAllElements();
-                                  np2 = 0;
-                                  pronto2 = false;
-                              }
-                              pts2.addElement(new Ponto2D(x,y));
-                              np2++;
-                      }
+                	  if(evt.getButton() == MouseEvent.BUTTON3) {
+                		  visivel=!visivel;
+                	  }else {
+                		  if(opcoes[1]==0) {
+                              float x = fx(evt.getX()), y = fy(evt.getY());
+                                    if (np1 == 4) np1 = 0;
+                                    pts[np1++] = new Ponto2D(x,y);
+                            }else {
+                              float x= fx(evt.getX()), y = fy(evt.getY());
+                                    if(pronto2) {
+                                        pts2.removeAllElements();
+                                        np2 = 0;
+                                        pronto2 = false;
+                                    }
+                                    pts2.addElement(new Ponto2D(x,y));
+                                    np2++;
+                            }
+                	  }
+                      
                   }else {
                     if(opcoes[1]==0) {
                     	
@@ -512,29 +486,33 @@ public class Janela extends JFrame {
                 if(opcoes[1]==0) {
                   initValues();
                       int left = iX(-rWidth / 2), right = iX(rWidth / 2), 
-                              bottom = iY(-rHeight / 2), top = iY(rHeight / 2);
+                      bottom = iY(-rHeight / 2), top = iY(rHeight / 2);
                       g.drawRect(left, top, right - left, bottom - top);
-                      for (int i=0; i < np1; i++) {
-                          g.drawRect(iX(pts[i].x)-2, iY(pts[i].y)-2, 4, 4);
-                          if (i > 0) g.drawLine(iX(pts[i-1].x), iY(pts[i-1].y), iX(pts[i].x), iY(pts[i].y));
+                      if(visivel) {
+                    	  for (int i=0; i < np1; i++) {
+                             g.drawRect(iX(pts[i].x)-2, iY(pts[i].y)-2, 4, 4);
+                             if (i > 0) g.drawLine(iX(pts[i-1].x), iY(pts[i-1].y), iX(pts[i].x), iY(pts[i].y));
+                          }
                       }
+                      
                       if (np1 == 4) geraCurva(g,pts[0], pts[1], pts[2], pts[3]);	
                 }else {
-                  initValues();
+                	  initValues();
                       g.setColor(Color.blue);
                       int left = iX(-rWidth / 2), right = iX(rWidth /2), 
-                           bottom = iY(-rHeight / 2 ), top = iY(rHeight / 2);
+                      bottom = iY(-rHeight / 2 ), top = iY(rHeight / 2);
                       g.drawRect(left, top, right - left, bottom - top);
                       Ponto2D[] p = new Ponto2D[np2];
                       pts2.copyInto(p);
                       if(!pronto2) {
                           for (int i=0; i < np2; i++) {
                               g.setColor(Color.black);
-                              g.drawRect(iX(p[i].x) -2, iY(p[i].y) - 2, 4, 4);
-                              if (i > 0) {
-                                g.drawLine(iX(p[i-1].x), iY(p[i-1].y), iX(p[i].x), iY(p[i].y));
-
-                              }
+                              if(visivel) {
+                            	g.drawRect(iX(p[i].x) -2, iY(p[i].y) - 2, 4, 4);
+                                  if (i > 0) {
+                                    g.drawLine(iX(p[i-1].x), iY(p[i-1].y), iX(p[i].x), iY(p[i].y));
+                                  }  
+                              }                              
                         }
                       }
                       if (np2 >= 4) { g.setColor(Color.red);geraCurva(g,p);}
@@ -605,12 +583,11 @@ public class Janela extends JFrame {
                   }
               }
           }
-         
+          
           void drawLine(Graphics g, float xP, float yP, float xQ, float yQ) {
             g.drawLine(iX(xP),iY(yP),iX(xQ), iY(yQ));
           }
-
-
+          
           void initValues() {
 
             Dimension d = getSize();
@@ -628,12 +605,8 @@ public class Janela extends JFrame {
                       drawLine(g,p1.x, p1.y,p2.x, p2.y);
                       p1 = p2;
                   }
-
-
               }
-
-
-
+          
               class Poly {
                   Vector<Ponto2D> vp = new Vector<Ponto2D>();
 
