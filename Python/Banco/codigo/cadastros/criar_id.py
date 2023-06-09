@@ -1,19 +1,17 @@
 #criar id
-#2oucyqcc8
+#2OUCYQCC8 ou #S085S2WB7Q
 
 import os
 import random
 
-lista_caracteres=("1","2","3","4","5","6","7","8","9","0","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z")
+lista_caracteres=[chr(i) for i in range(ord("A"),ord("Z")+1)]
+lista_caracteres.extend([str(i) for i in range(10)])
 
-def criar_id():
+def criar_id(*,q=10):
     
-    id_usuario="" 
+    caracteres=random.choices(lista_caracteres,k=q)
 
-    for vezes in range (0, 10):
-
-        item=random.choice(lista_caracteres)
-
-        id_usuario=f"{id_usuario}{item}"
-
-    return id_usuario
+    return "#"+"".join(caracteres)
+    
+if __name__ == "__main__":
+    print(criar_id())
